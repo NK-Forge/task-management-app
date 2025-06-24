@@ -146,7 +146,7 @@ Interested in a custom task management solution for your business? I specialize 
 
 **Nevin Kadlec** - Full-Stack Developer
 
-- [Email Me](3rza.kaneki@gmail.com)
+- [Email Me](mailto:3rza.kaneki@gmail.com)
 - [LinkedIn](https://www.linkedin.com/in/nevin-kadlec/)
 <!--- [Portfolio Projects](TODO)-->
 
