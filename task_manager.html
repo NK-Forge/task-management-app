@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro - Project Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .task-form {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .task-form h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .tasks-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .task-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            background: #f8f9fa;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-project {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .priority {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .priority.high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority.medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority.low {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .task-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-complete {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #ff9800;
+            color: white;
+        }
+
+        .progress-section {
+            margin-top: 25px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            height: 100%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .task-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TaskFlow Pro</h1>
+            <p>Professional Project Management & Task Tracking</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="task-form">
+                    <h3>Add New Task</h3>
+                    <form id="taskForm">
+                        <div class="form-group">
+                            <label for="taskTitle">Task Title</label>
+                            <input type="text" id="taskTitle" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="taskProject">Project</label>
+                            <input type="text" id="taskProject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="taskPriority">Priority</label>
+                            <select id="taskPriority" required>
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="taskDueDate">Due Date</label>
+                            <input type="date" id="taskDueDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="taskDescription">Description</label>
+                            <textarea id="taskDescription" rows="3"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Add Task</button>
+                    </form>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTasks">0</div>
+                        <div class="stat-label">Total Tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedTasks">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingTasks">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="overdueTasks">0</div>
+                        <div class="stat-label">Overdue</div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <h4>Overall Progress</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tasks-section">
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-filter="all">All Tasks</div>
+                    <div class="filter-tab" data-filter="pending">Pending</div>
+                    <div class="filter-tab" data-filter="completed">Completed</div>
+                    <div class="filter-tab" data-filter="overdue">Overdue</div>
+                </div>
+
+                <div class="task-list" id="taskList">
+                    <div class="empty-state">
+                        <div style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;">📝</div>
+                        <h3>No tasks yet</h3>
+                        <p>Add your first task to get started with project management!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TaskManager {
+            constructor() {
+                this.tasks = JSON.parse(localStorage.getItem('taskflow_tasks')) || [];
+                this.currentFilter = 'all';
+                this.editingTaskId = null;
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.render();
+                this.updateStats();
+                
+                // Add some demo tasks if starting fresh
+                if (this.tasks.length === 0) {
+                    this.addDemoTasks();
+                }
+            }
+
+            bindEvents() {
+                // Form submission
+                document.getElementById('taskForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleFormSubmit();
+                });
+
+                // Filter tabs
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.setFilter(e.target.dataset.filter);
+                    });
+                });
+            }
+
+            addDemoTasks() {
+                const demoTasks = [
+                    {
+                        id: Date.now() + 1,
+                        title: "Design website mockup",
+                        project: "Client Website",
+                        priority: "high",
+                        dueDate: this.getDateString(2),
+                        description: "Create responsive design mockups for client approval",
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: Date.now() + 2,
+                        title: "Set up database schema",
+                        project: "E-commerce App",
+                        priority: "medium",
+                        dueDate: this.getDateString(5),
+                        description: "Design and implement database structure for product catalog",
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: Date.now() + 3,
+                        title: "Write project documentation",
+                        project: "Client Website",
+                        priority: "low",
+                        dueDate: this.getDateString(7),
+                        description: "Document API endpoints and deployment process",
+                        completed: true,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                this.tasks = demoTasks;
+                this.saveTasks();
+            }
+
+            getDateString(daysFromNow) {
+                const date = new Date();
+                date.setDate(date.getDate() + daysFromNow);
+                return date.toISOString().split('T')[0];
+            }
+
+            handleFormSubmit() {
+                const formData = {
+                    title: document.getElementById('taskTitle').value.trim(),
+                    project: document.getElementById('taskProject').value.trim(),
+                    priority: document.getElementById('taskPriority').value,
+                    dueDate: document.getElementById('taskDueDate').value,
+                    description: document.getElementById('taskDescription').value.trim()
+                };
+
+                if (!formData.title || !formData.project) {
+                    alert('Please fill in required fields');
+                    return;
+                }
+
+                if (this.editingTaskId) {
+                    this.updateTask(this.editingTaskId, formData);
+                } else {
+                    this.addTask(formData);
+                }
+
+                this.resetForm();
+            }
+
+            addTask(taskData) {
+                const task = {
+                    id: Date.now(),
+                    ...taskData,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.tasks.unshift(task);
+                this.saveTasks();
+                this.render();
+                this.updateStats();
+            }
+
+            updateTask(id, taskData) {
+                const taskIndex = this.tasks.findIndex(task => task.id === id);
+                if (taskIndex !== -1) {
+                    this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...taskData };
+                    this.saveTasks();
+                    this.render();
+                    this.updateStats();
+                }
+                this.editingTaskId = null;
+                document.querySelector('.btn[type="submit"]').textContent = 'Add Task';
+            }
+
+            deleteTask(id) {
+                if (confirm('Are you sure you want to delete this task?')) {
+                    this.tasks = this.tasks.filter(task => task.id !== id);
+                    this.saveTasks();
+                    this.render();
+                    this.updateStats();
+                }
+            }
+
+            toggleComplete(id) {
+                const task = this.tasks.find(task => task.id === id);
+                if (task) {
+                    task.completed = !task.completed;
+                    task.completedAt = task.completed ? new Date().toISOString() : null;
+                    this.saveTasks();
+                    this.render();
+                    this.updateStats();
+                }
+            }
+
+            editTask(id) {
+                const task = this.tasks.find(task => task.id === id);
+                if (task) {
+                    document.getElementById('taskTitle').value = task.title;
+                    document.getElementById('taskProject').value = task.project;
+                    document.getElementById('taskPriority').value = task.priority;
+                    document.getElementById('taskDueDate').value = task.dueDate;
+                    document.getElementById('taskDescription').value = task.description;
+                    
+                    this.editingTaskId = id;
+                    document.querySelector('.btn[type="submit"]').textContent = 'Update Task';
+                    document.getElementById('taskTitle').focus();
+                }
+            }
+
+            resetForm() {
+                document.getElementById('taskForm').reset();
+                this.editingTaskId = null;
+                document.querySelector('.btn[type="submit"]').textContent = 'Add Task';
+            }
+
+            setFilter(filter) {
+                this.currentFilter = filter;
+                
+                // Update active tab
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+                
+                this.render();
+            }
+
+            getFilteredTasks() {
+                switch (this.currentFilter) {
+                    case 'completed':
+                        return this.tasks.filter(task => task.completed);
+                    case 'pending':
+                        return this.tasks.filter(task => !task.completed);
+                    case 'overdue':
+                        return this.tasks.filter(task => !task.completed && this.isOverdue(task));
+                    default:
+                        return this.tasks;
+                }
+            }
+
+            isOverdue(task) {
+                if (!task.dueDate) return false;
+                const today = new Date().toISOString().split('T')[0];
+                return task.dueDate < today;
+            }
+
+            formatDate(dateString) {
+                if (!dateString) return 'No due date';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            }
+
+            render() {
+                const taskList = document.getElementById('taskList');
+                const filteredTasks = this.getFilteredTasks();
+
+                if (filteredTasks.length === 0) {
+                    taskList.innerHTML = `
+                        <div class="empty-state">
+                            <div style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;">📝</div>
+                            <h3>No ${this.currentFilter === 'all' ? '' : this.currentFilter} tasks</h3>
+                            <p>${this.currentFilter === 'all' 
+                                ? 'Add your first task to get started!' 
+                                : `No ${this.currentFilter} tasks found.`}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                taskList.innerHTML = filteredTasks.map(task => `
+                    <div class="task-item ${task.completed ? 'completed' : ''}">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title ${task.completed ? 'completed' : ''}">${task.title}</div>
+                                <div class="task-project">${task.project}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-meta">
+                            <span class="priority ${task.priority}">${task.priority.toUpperCase()}</span>
+                            <span>📅 ${this.formatDate(task.dueDate)}</span>
+                            ${this.isOverdue(task) && !task.completed ? '<span style="color: #f44336;">⚠️ OVERDUE</span>' : ''}
+                        </div>
+                        
+                        ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+                        
+                        <div class="task-actions">
+                            <button class="btn-small btn-complete" onclick="taskManager.toggleComplete(${task.id})">
+                                ${task.completed ? '↩️ Undo' : '✅ Complete'}
+                            </button>
+                            <button class="btn-small btn-edit" onclick="taskManager.editTask(${task.id})">
+                                ✏️ Edit
+                            </button>
+                            <button class="btn-small btn-delete" onclick="taskManager.deleteTask(${task.id})">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateStats() {
+                const total = this.tasks.length;
+                const completed = this.tasks.filter(task => task.completed).length;
+                const pending = total - completed;
+                const overdue = this.tasks.filter(task => !task.completed && this.isOverdue(task)).length;
+                const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                document.getElementById('totalTasks').textContent = total;
+                document.getElementById('completedTasks').textContent = completed;
+                document.getElementById('pendingTasks').textContent = pending;
+                document.getElementById('overdueTasks').textContent = overdue;
+                
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = `${progress}%`;
+                progressFill.textContent = `${progress}%`;
+            }
+
+            saveTasks() {
+                localStorage.setItem('taskflow_tasks', JSON.stringify(this.tasks));
+            }
+        }
+
+        // Initialize the app
+        const taskManager = new TaskManager();
+    </script>
+</body>
+</html>
