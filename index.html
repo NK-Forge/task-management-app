@@ -454,13 +454,14 @@
 
             init() {
                 this.bindEvents();
-                this.render();
-                this.updateStats();
                 
                 // Add some demo tasks if starting fresh
                 if (this.tasks.length === 0) {
                     this.addDemoTasks();
                 }
+                
+                this.render();
+                this.updateStats();
             }
 
             bindEvents() {
@@ -514,6 +515,8 @@
                 
                 this.tasks = demoTasks;
                 this.saveTasks();
+                this.render();
+                this.updateStats();
             }
 
             getDateString(daysFromNow) {
