@@ -4,7 +4,7 @@ A comprehensive web-based task management solution designed for small businesses
 
 ## 🚀 Live Demo
 
-**[View Live Application](https://NK-Forge.github.io/task-managmet-app/)**
+**[View Live Application](https://nk-forge.github.io/task-management-app/)**
 
 _Professional task management interface with real-time updates and responsive design_
 
