@@ -4,7 +4,7 @@ A comprehensive web-based task management solution designed for small businesses
 
 ## 🚀 Live Demo
 
-**[View Live Application](https://erzakaneki.github.io/task-managmet-app/)**
+**[View Live Application](https://NK-Forge.github.io/task-managmet-app/)**
 
 _Professional task management interface with real-time updates and responsive design_
 
@@ -146,7 +146,7 @@ Interested in a custom task management solution for your business? I specialize 
 
 **Nevin Kadlec** - Full-Stack Developer
 
-- [Email Me](mailto:3rza.kaneki@gmail.com)
+- [Email Me](mailto:dev@NK-Forge@gmail.com)
 - [LinkedIn](https://www.linkedin.com/in/nevin-kadlec/)
 <!--- [Portfolio Projects](TODO)-->
 
@@ -154,7 +154,7 @@ _Specializing in business automation, web applications, and productivity solutio
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/NK-Forge/task-management-app/blob/main/LICENCE) file for details.
 
 ---
 
